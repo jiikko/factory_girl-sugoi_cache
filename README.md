@@ -19,13 +19,13 @@ Or install it yourself as:
     $ gem install factory_girl-sugoi_preload
 
 ## Usage
-```
+```ruby
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 end
 ```
 
-```
+```ruby
 FactoryGirl.define do
   factory :user do
     name "MyString"
@@ -38,8 +38,7 @@ FactoryGirl.define do
 end
 ```
 
-```
-
+```ruby
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
@@ -54,7 +53,6 @@ RSpec.describe User, type: :model do
   end
 end
 ```
-
 
 ## Contributing
 
