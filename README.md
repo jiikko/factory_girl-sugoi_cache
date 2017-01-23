@@ -1,8 +1,6 @@
 # FactoryGirl::SugoiPreload
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/factory_girl/sugoi_preload`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Inspired by https://github.com/fnando/factory_girl-preload
 
 ## Installation
 
@@ -21,14 +19,42 @@ Or install it yourself as:
     $ gem install factory_girl-sugoi_preload
 
 ## Usage
+```
+RSpec.configure do |config|
+  config.use_transactional_fixtures = true
+end
+```
 
-TODO: Write usage instructions here
+```
+FactoryGirl.define do
+  factory :user do
+    name "MyString"
+    email "MyString"
+  end
 
-## Development
+  preload do
+    factory(:john) { FactoryGirl.create(:user, name: :john) }
+  end
+end
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+require 'rails_helper'
+
+RSpec.describe User, type: :model do
+  fixtures :all
+  factorygirl_preload :users
+
+  it 'fast' do
+    3000.times { FactoryGirl.load(:john) }
+  end
+  it 'slow' do
+    3000.times { FactoryGirl.create(:user, name: :john) }
+  end
+end
+```
+
 
 ## Contributing
 
