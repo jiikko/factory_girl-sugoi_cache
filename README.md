@@ -43,7 +43,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   fixtures :all
-  factorygirl_preload :users
+  factorygirl_cache :users
 
   it 'fast' do
     3000.times { FactoryGirl.find_cache(:john) }

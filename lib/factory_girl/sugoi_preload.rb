@@ -5,9 +5,22 @@ module FactoryGirl
   module SugoiPreload
     class << self
       attr_accessor \
-        :cache_blocks, \
-        :cache_records, \
-        :cache_ids,
+        :blocks, \
+        :records, \
+        :model_id_table
+    end
+  end
+end
+
+if defined?(RSpec) # for console
+  RSpec.configure do |config|
+    config.before(:suite) do
+      FactoryGirl::SugoiPreload.clean
+      FactoryGirl::SugoiPreload.run
+    end
+
+    config.before(:each) do
+      FactoryGirl::SugoiPreload.reload_factories
     end
   end
 end
