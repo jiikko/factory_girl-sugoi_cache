@@ -32,7 +32,7 @@ FactoryGirl.define do
     email "MyString"
   end
 
-  preload do
+  cache do
     factory(:john) { FactoryGirl.create(:user, name: :john) }
   end
 end
@@ -46,7 +46,7 @@ RSpec.describe User, type: :model do
   factorygirl_preload :users
 
   it 'fast' do
-    3000.times { FactoryGirl.load(:john) }
+    3000.times { FactoryGirl.find_cache(:john) }
   end
   it 'slow' do
     3000.times { FactoryGirl.create(:user, name: :john) }
