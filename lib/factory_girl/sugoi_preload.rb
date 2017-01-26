@@ -15,7 +15,7 @@ end
 if defined?(RSpec) # for console
   RSpec.configure do |config|
     config.before(:suite) do
-      FactoryGirl::SugoiPreload.clean
+      FactoryGirl::SugoiPreload.clean_and_run
       FactoryGirl::SugoiPreload.run
     end
 

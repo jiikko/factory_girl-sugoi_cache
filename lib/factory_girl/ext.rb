@@ -9,6 +9,12 @@ module FactoryGirl
     end
 
     def self.clean
+      # TODO 全モデルでdelete_allしない, cleanするレコード の条件は
+      # fixtuiresが取り込んだレコード以外
+      #   かつ
+      # self#runで生成したレコード以外
+      # を削除する
+      FactoryGirl::SugoiPreload.model_id_table.values
       ActiveRecord::Base.connection.disable_referential_integrity do
         ActiveRecord::Base.descendants.each(&:delete_all)
       end
@@ -24,6 +30,10 @@ module FactoryGirl
           factory_girl_object.instance_eval(&block)
         end
       end
+    end
+
+    def self.clean_and_run
+      # TODO
     end
 
     def self.reload_factories
