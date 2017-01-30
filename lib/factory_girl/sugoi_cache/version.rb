@@ -1,5 +1,5 @@
 module FactoryGirl
-  module SugoiPreload
+  module SugoiCache
     VERSION = "0.1.0"
   end
 end

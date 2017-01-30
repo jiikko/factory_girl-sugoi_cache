@@ -1,4 +1,4 @@
-# FactoryGirl::SugoiPreload
+# FactoryGirl::SugoiCache
 
 Inspired by https://github.com/fnando/factory_girl-preload
 
@@ -7,7 +7,7 @@ Inspired by https://github.com/fnando/factory_girl-preload
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'factory_girl-sugoi_preload'
+gem 'factory_girl-sugoi_cache'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install factory_girl-sugoi_preload
+    $ gem install factory_girl-sugoi_cache
 
 ## Usage
 ```ruby
@@ -43,7 +43,6 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   fixtures :all
-  factorygirl_cache :users
 
   it 'fast' do
     3000.times { FactoryGirl.find_cache(:john) }
@@ -56,5 +55,4 @@ end
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/factory_girl-sugoi_preload.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/factory_girl-sugoi_cache.

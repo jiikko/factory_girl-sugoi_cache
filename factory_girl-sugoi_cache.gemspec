@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'factory_girl/sugoi_preload/version'
+require 'factory_girl/sugoi_cache/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "factory_girl-sugoi_preload"
-  spec.version       = FactoryGirl::SugoiPreload::VERSION
+  spec.name          = "factory_girl-sugoi_cache"
+  spec.version       = FactoryGirl::SugoiCache::VERSION
   spec.authors       = ["jiikko"]
   spec.email         = ["n905i.1214@gmail.com"]
 
   spec.summary       = %q{preload FactoryGirl}
   spec.description   = spec.summary
-  spec.homepage      = "https://github.com/jiikko/factory_girl-sugoi_preload"
+  spec.homepage      = "https://github.com/jiikko/factory_girl-sugoi_cache"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"

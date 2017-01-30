@@ -1,10 +1,10 @@
 module FactoryGirl
-  module SugoiPreload
+  module SugoiCache
     module Helper
       def factory(name, &block)
-        FactoryGirl::SugoiPreload.model_id_table ||= {}
+        FactoryGirl::SugoiCache.model_id_table ||= {}
         record = yield
-        FactoryGirl::SugoiPreload.model_id_table[name] = { model: record.class, id: record.id }
+        FactoryGirl::SugoiCache.model_id_table[name] = { model: record.class, id: record.id }
       end
     end
 
@@ -13,7 +13,7 @@ module FactoryGirl
     # を削除する
     def self.clean
       ActiveRecord::FixtureSet.cached_fixtures(ActiveRecord::Base.connection).each do |fixture_set|
-        # FactoryGirl::SugoiPreload.model_id_table にのっているテーブルはskipする
+        # FactoryGirl::SugoiCache.model_id_table にのっているテーブルはskipする
         ActiveRecord::Base.connection.disable_referential_integrity do
           fixture_set.model_class.
             where.not(
@@ -26,29 +26,29 @@ module FactoryGirl
     def self.run
       factory_girl_object = Object.new.extend(
         FactoryGirl::Syntax::Methods,
-        FactoryGirl::SugoiPreload::Helper,
+        FactoryGirl::SugoiCache::Helper,
       )
       ActiveRecord::Base.connection.transaction(requires_new: true) do
-        FactoryGirl::SugoiPreload.blocks.each do |block|
+        FactoryGirl::SugoiCache.blocks.each do |block|
           factory_girl_object.instance_eval(&block)
         end
       end
     end
 
     def self.reload_factories
-      FactoryGirl::SugoiPreload.records = nil
-      FactoryGirl::SugoiPreload.records ||= {}
+      FactoryGirl::SugoiCache.records = nil
+      FactoryGirl::SugoiCache.records ||= {}
     end
   end
 
   module Syntax
     module Methods
       def find_cache(name)
-        record = FactoryGirl::SugoiPreload.records[name]
+        record = FactoryGirl::SugoiCache.records[name]
         unless record
-          hash = FactoryGirl::SugoiPreload.model_id_table[name]
+          hash = FactoryGirl::SugoiCache.model_id_table[name]
           record = hash[:model].find(hash[:id])
-          FactoryGirl::SugoiPreload.records[name] = record
+          FactoryGirl::SugoiCache.records[name] = record
         end
         return record
       end
@@ -59,8 +59,8 @@ module FactoryGirl
     module Default
       class DSL
         def cache(&block)
-          FactoryGirl::SugoiPreload.blocks ||= []
-          FactoryGirl::SugoiPreload.blocks << block
+          FactoryGirl::SugoiCache.blocks ||= []
+          FactoryGirl::SugoiCache.blocks << block
         end
       end
     end
