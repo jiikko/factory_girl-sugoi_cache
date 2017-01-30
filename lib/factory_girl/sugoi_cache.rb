@@ -30,10 +30,12 @@ module FactoryGirl
   module SugoiCache
     module Runner
       def before_setup
-        ActiveRecord::Base.connection.commit_transaction
-        FactoryGirl::SugoiCache.clean
-        FactoryGirl::SugoiCache.run
-        ActiveRecord::Base.connection.begin_transaction
+        if self.use_transactional_fixtures
+          ActiveRecord::Base.connection.commit_transaction
+          FactoryGirl::SugoiCache.clean
+          FactoryGirl::SugoiCache.run
+          ActiveRecord::Base.connection.begin_transaction
+        end
         super
       end
     end
