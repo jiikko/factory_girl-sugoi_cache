@@ -8,15 +8,18 @@ module FactoryGirl
       end
     end
 
+    # 全モデルでdelete_allしない, cleanするレコード の条件は
+    # * fixtuiresが取り込んだレコード以外
+    # を削除する
     def self.clean
-      # TODO 全モデルでdelete_allしない, cleanするレコード の条件は
-      # fixtuiresが取り込んだレコード以外
-      #   かつ
-      # self#runで生成したレコード以外
-      # を削除する
-      FactoryGirl::SugoiPreload.model_id_table.values
-      ActiveRecord::Base.connection.disable_referential_integrity do
-        ActiveRecord::Base.descendants.each(&:delete_all)
+      ActiveRecord::FixtureSet.cached_fixtures(ActiveRecord::Base.connection).each do |fixture_set|
+        # FactoryGirl::SugoiPreload.model_id_table にのっているテーブルはskipする
+        ActiveRecord::Base.connection.disable_referential_integrity do
+          fixture_set.model_class.
+            where.not(
+              id: fixture_set.fixtures.map { |key, fixture| fixture['id'] }
+          ).delete_all
+        end
       end
     end
 
@@ -32,10 +35,6 @@ module FactoryGirl
       end
     end
 
-    def self.clean_and_run
-      # TODO
-    end
-
     def self.reload_factories
       FactoryGirl::SugoiPreload.records = nil
       FactoryGirl::SugoiPreload.records ||= {}
@@ -48,7 +47,8 @@ module FactoryGirl
         record = FactoryGirl::SugoiPreload.records[name]
         unless record
           hash = FactoryGirl::SugoiPreload.model_id_table[name]
-          FactoryGirl::SugoiPreload.records[name] = hash[:model].find(hash[:id])
+          record = hash[:model].find(hash[:id])
+          FactoryGirl::SugoiPreload.records[name] = record
         end
         return record
       end
