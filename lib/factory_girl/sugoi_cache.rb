@@ -1,3 +1,4 @@
+require "factory_girl"
 require "factory_girl/sugoi_cache/version"
 require "factory_girl/ext"
 
@@ -41,4 +42,6 @@ module FactoryGirl
     end
   end
 end
-ActiveRecord::TestFixtures.include(FactoryGirl::SugoiCache::Runner)
+ActiveSupport.on_load(:after_initialize) do
+  ::ActiveRecord::TestFixtures.include(FactoryGirl::SugoiCache::Runner)
+end
